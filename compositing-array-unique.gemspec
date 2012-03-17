@@ -13,6 +13,8 @@ Gem::Specification.new do |spec|
   spec.email                     =  'asher@ridiculouspower.com'
   spec.homepage                  =  'http://rubygems.org/gems/compositing-array-unique'
 
+  spec.add_dependency            'compositing-array'
+
   spec.date                      =  Date.today.to_s
   
   spec.files                     = Dir[ '{lib,spec}/**/*',
