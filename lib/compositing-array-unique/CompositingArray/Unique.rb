@@ -77,6 +77,16 @@ class ::CompositingArray::Unique < ::CompositingArray
     return super
     
   end
+
+  ##############
+  #  include?  #
+  ##############
+  
+  def include?( object )
+    
+    return @unique_keys.has_key?( object )
+    
+  end
   
   ##############
   #  collect!  #

@@ -6,3 +6,7 @@ Initial release.
 == 3/18/12
 
 Added hooks for subclassing.
+
+== 3/24/12
+
+Added :include? implementation using @unique_keys instead of linear search.
