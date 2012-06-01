@@ -10,3 +10,7 @@ Added hooks for subclassing.
 == 3/24/12
 
 Added :include? implementation using @unique_keys instead of linear search.
+
+== 6/1/12
+
+Added :configuration_instance parameter to :initialize.

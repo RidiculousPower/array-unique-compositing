@@ -5,7 +5,7 @@ class ::CompositingArray::Unique < ::CompositingArray
   #  initialize  #
   ################
   
-  def initialize( parent_composite_array = nil )
+  def initialize( parent_composite_array = nil, configuration_instance = nil )
 
     @unique_keys = { }
     
