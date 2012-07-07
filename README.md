@@ -1,10 +1,10 @@
 # Unique Compositing Array #
 
-http://rubygems.org/gems/compositing-array-unique
+http://rubygems.org/gems/array-unique-compositing
 
 # Description #
 
-Provides CompositingArray::Unique.
+Provides Array::Unique::Compositing.
 
 # Summary #
 
@@ -12,13 +12,13 @@ An implementation of Array that permits chaining, where children inherit changes
 
 # Install #
 
-* sudo gem install compositing-array-unique
+* sudo gem install array-unique-compositing
 
 # Usage #
 
 ```ruby
-compositing_array = CompositingArray::Unique.new
-sub_compositing_array = CompositingArray::Unique.new( compositing_array )
+compositing_array = Array::Unique::Compositing.new
+sub_compositing_array = Array::Unique::Compositing.new( compositing_array )
 
 compositing_array.push( :A )
 # compositing_array
