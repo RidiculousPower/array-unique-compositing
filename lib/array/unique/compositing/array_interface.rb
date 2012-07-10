@@ -6,28 +6,6 @@ module ::Array::Unique::Compositing::ArrayInterface
 
   instances_identify_as!( ::Array::Unique::Compositing )
 
-  extend ::Module::Cluster
-
-  cluster( :unique_compositing_array_interface ).before_include.cascade_to( :class ) do |hooked_instance|
-    
-    hooked_instance.class_eval do
-      
-      unless method_defined?( :unique_set )
-        alias_method :unique_set, :[]=
-      end
-
-      unless method_defined?( :unique_insert )
-        alias_method :unique_insert, :insert
-      end
-
-      unless method_defined?( :unique_delete_at )
-        alias_method :unique_delete_at, :delete_at
-      end
-      
-    end
-    
-  end
-
   #########
   #  []=  #
   #########

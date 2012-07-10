@@ -14,3 +14,7 @@ Added :include? implementation using @unique_keys instead of linear search.
 == 6/1/12
 
 Added :configuration_instance parameter to :initialize.
+
+== 7/09/12
+
+Removed module-cluster dependency.
