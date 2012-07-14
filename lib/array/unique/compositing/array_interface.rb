@@ -53,6 +53,18 @@ module ::Array::Unique::Compositing::ArrayInterface
       private ######################################################################################
   ##################################################################################################
 
+  #####################################
+  #  lazy_set_parent_element_in_self  #
+  #####################################
+
+  def lazy_set_parent_element_in_self( local_index, *optional_object )
+  
+    object = super
+    
+    @unique_keys[ object ] = true
+    
+  end
+  
   ###########################
   #  update_for_parent_set  #
   ###########################
