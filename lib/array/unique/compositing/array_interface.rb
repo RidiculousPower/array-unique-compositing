@@ -64,6 +64,8 @@ module ::Array::Unique::Compositing::ArrayInterface
     
     @unique_keys[ object ] = true
     
+    return object
+    
   end
   
   ###########################
