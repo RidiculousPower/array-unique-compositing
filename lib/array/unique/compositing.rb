@@ -1,4 +1,6 @@
 
+begin ; require 'development' ; rescue ; end
+
 require 'array/unique'
 require 'array/compositing'
 

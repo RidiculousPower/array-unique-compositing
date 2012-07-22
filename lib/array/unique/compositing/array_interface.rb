@@ -37,6 +37,7 @@ module ::Array::Unique::Compositing::ArrayInterface
     did_set = false
 
     if @unique_keys.has_key?( object )                              and 
+       @parent_index_map                                            and
        parent_index = @parent_index_map.parent_index( local_index ) and 
        @parent_composite_object[ parent_index ] == object
       
@@ -87,7 +88,7 @@ module ::Array::Unique::Compositing::ArrayInterface
   #  update_for_parent_insert  #
   ##############################
 
-  def update_for_parent_insert( parent_index, object )
+  def update_for_parent_insert( requested_parent_index, parent_index, object )
     
     called_super = false
     
