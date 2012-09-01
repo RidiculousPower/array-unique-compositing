@@ -10,13 +10,15 @@ describe ::Array::Unique::Compositing do
   it 'can add initialize with an ancestor, inheriting its values and linking to it as a child' do
   
     cascading_composite_array = ::Array::Unique::Compositing.new
-
-    cascading_composite_array.instance_variable_get( :@parent_composite_object ).should == nil
+    cascading_composite_array.has_parents?.should == false
+    cascading_composite_array.parents.should == [ ]
     cascading_composite_array.should == []
     cascading_composite_array.push( :A, :B, :C, :D )
     
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
-    sub_cascading_composite_array.instance_variable_get( :@parent_composite_object ).should == cascading_composite_array
+    sub_cascading_composite_array.has_parents?.should == true
+    sub_cascading_composite_array.parents.should == [ cascading_composite_array ]
+    sub_cascading_composite_array.has_parent?( cascading_composite_array ).should == true
     sub_cascading_composite_array.should == [ :A, :B, :C, :D ]
 
   end
