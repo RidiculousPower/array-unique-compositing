@@ -27,30 +27,6 @@ module ::Array::Unique::Compositing::ArrayInterface
     end
     
   end
-
-  #########
-  #  []=  #
-  #########
-
-  def []=( local_index, object )
-    
-    did_set = false
-
-    if @unique_keys.has_key?( object )                                     and 
-       parent_index_struct = @parent_index_map.parent_index( local_index ) and 
-       parent_index_struct.parent_instance[ parent_index_struct.parent_index ] == object
-      
-      @parent_index_map.local_set( local_index )
-
-    else
-
-      super
-
-    end
-    
-    return did_set
-    
-  end
   
   ##################################################################################################
       private ######################################################################################
