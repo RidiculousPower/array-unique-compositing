@@ -15,3 +15,6 @@ class ::Array::Unique::Compositing < ::Array::Hooked
   include ::Array::Unique::Compositing::ArrayInterface
   
 end
+
+# If we don't explicitly set this then we will end up with ::Array::Compositing::Unique pointing to ::Array::Unique.
+::Array::Compositing.const_set( :Unique, ::Array::Unique::Compositing )

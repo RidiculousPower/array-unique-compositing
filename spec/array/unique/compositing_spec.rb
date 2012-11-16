@@ -18,7 +18,7 @@ describe ::Array::Unique::Compositing do
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
     sub_cascading_composite_array.has_parents?.should == true
     sub_cascading_composite_array.parents.should == [ cascading_composite_array ]
-    sub_cascading_composite_array.has_parent?( cascading_composite_array ).should == true
+    sub_cascading_composite_array.is_parent?( cascading_composite_array ).should == true
     sub_cascading_composite_array.should == [ :A, :B, :C, :D ]
 
   end
