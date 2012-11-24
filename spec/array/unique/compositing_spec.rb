@@ -134,7 +134,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ :A ]
     sub_cascading_composite_array.should == [ :A ]
 
-    cascading_composite_array += [ :B ]
+    cascading_composite_array.concat( [ :B ] )
     cascading_composite_array.should == [ :A, :B ]
     sub_cascading_composite_array.should == [ :A, :B ]
 
@@ -142,7 +142,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ :A, :B ]
     sub_cascading_composite_array.should == [ :A, :B, :C ]
 
-    sub_cascading_composite_array += [ :B ]
+    sub_cascading_composite_array.concat( [ :B ] )
     cascading_composite_array.should == [ :A, :B ]
     sub_cascading_composite_array.should == [ :A, :B, :C ]
 
@@ -157,7 +157,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array = ::Array::Unique::Compositing.new
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
 
-    cascading_composite_array += [ :A, :B ]
+    cascading_composite_array.concat( [ :A, :B ] )
     cascading_composite_array.should == [ :A, :B ]
     sub_cascading_composite_array.should == [ :A, :B ]
 
@@ -165,7 +165,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ ]
     sub_cascading_composite_array.should == [ ]
 
-    sub_cascading_composite_array += [ :B, :C, :D ]
+    sub_cascading_composite_array.concat( [ :B, :C, :D ] )
     cascading_composite_array.should == [ ]
     sub_cascading_composite_array.should == [ :B, :C, :D ]
     
@@ -188,7 +188,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ :A ]
     sub_cascading_composite_array.should == [ :A ]
 
-    cascading_composite_array -= [ :A ]
+    cascading_composite_array.delete( :A )
     cascading_composite_array.should == [ ]
     sub_cascading_composite_array.should == [ ]
 
@@ -200,7 +200,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B, :C ]
 
-    sub_cascading_composite_array -= [ :B ]
+    sub_cascading_composite_array.delete( :B )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :C ]
 
@@ -548,36 +548,27 @@ describe ::Array::Unique::Compositing do
   ##############
 
   it 'can shuffle self' do
-
-    cascading_composite_array = ::Array::Unique::Compositing.new
+    cascading_composite_array = ::Array::Unique::Compositing.new( nil, [ :A, :B, :C ] )
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
-
-    cascading_composite_array.push( :A, :B, :C )
-    cascading_composite_array.should == [ :A, :B, :C ]
-    sub_cascading_composite_array.should == cascading_composite_array
-
-    prior_version = cascading_composite_array.dup
-    attempts = [ ]
-    50.times do
+    shuffled = false
+    100.times do
       cascading_composite_array.shuffle!
-      attempts.push( cascading_composite_array == prior_version )
-      prior_version = cascading_composite_array.dup
+      break if shuffled = ( cascading_composite_array != [ :A, :B, :C ] )
     end
-    attempts_correct = attempts.select { |member| member == false }.count
-    ( attempts_correct >= 10 ).should == true
+    shuffled.should == true
     sub_cascading_composite_array.should == cascading_composite_array
-    first_shuffle_version = cascading_composite_array
-
-    cascading_composite_array.should == first_shuffle_version
-    attempts = [ ]
-    50.times do
-      sub_cascading_composite_array.shuffle!
-      attempts.push( sub_cascading_composite_array == cascading_composite_array )
-      prior_version = cascading_composite_array.dup
+  end
+  
+  it 'can shuffle self with a random number generator' do
+    cascading_composite_array = ::Array::Unique::Compositing.new( nil, [ :A, :B, :C ] )
+    sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
+    shuffled = false
+    100.times do
+      cascading_composite_array.shuffle!( random: Random.new( 1 ) )
+      break if shuffled = ( cascading_composite_array != [ :A, :B, :C ] )
     end
-    attempts_correct = attempts.select { |member| member == false }.count
-    ( attempts_correct >= 10 ).should == true    
-
+    shuffled.should == true
+    sub_cascading_composite_array.should == cascading_composite_array
   end
 
   ##############
@@ -727,7 +718,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array = ::Array::Unique::Compositing.new
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
 
-    cascading_composite_array += :A
+    cascading_composite_array.concat( :A )
     cascading_composite_array.should == [ :A ]
     sub_cascading_composite_array.should == [ :A ]
 
@@ -750,7 +741,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array = ::Array::Unique::Compositing.new
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
 
-    cascading_composite_array += :A
+    cascading_composite_array.concat( :A )
     cascading_composite_array.should == [ :A ]
     sub_cascading_composite_array.should == [ :A ]
 
@@ -758,11 +749,11 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ ]
     sub_cascading_composite_array.should == [ ]
 
-    cascading_composite_array += :B
+    cascading_composite_array.concat( :B )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B ]
 
-    sub_cascading_composite_array += :C
+    sub_cascading_composite_array.concat( :C )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B, :C ]
     sub_cascading_composite_array.pop.should == :C
@@ -780,7 +771,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array = ::Array::Unique::Compositing.new
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
 
-    cascading_composite_array += :A
+    cascading_composite_array.concat( :A )
     cascading_composite_array.should == [ :A ]
     sub_cascading_composite_array.should == [ :A ]
 
@@ -788,11 +779,11 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ ]
     sub_cascading_composite_array.should == [ ]
 
-    cascading_composite_array += :B
+    cascading_composite_array.concat( :B )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B ]
 
-    sub_cascading_composite_array += :C
+    sub_cascading_composite_array.concat( :C )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B, :C ]
     sub_cascading_composite_array.shift.should == :B
@@ -810,7 +801,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array = ::Array::Unique::Compositing.new
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
 
-    cascading_composite_array += :A
+    cascading_composite_array.concat( :A )
     cascading_composite_array.should == [ :A ]
     sub_cascading_composite_array.should == [ :A ]
 
@@ -818,11 +809,11 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ ]
     sub_cascading_composite_array.should == [ ]
 
-    cascading_composite_array += :B
+    cascading_composite_array.concat( :B )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B ]
 
-    sub_cascading_composite_array += :C
+    sub_cascading_composite_array.concat( :C )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B, :C ]
 
@@ -841,7 +832,7 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array = ::Array::Unique::Compositing.new
     sub_cascading_composite_array = ::Array::Unique::Compositing.new( cascading_composite_array )
 
-    cascading_composite_array += :A
+    cascading_composite_array.concat( :A )
     cascading_composite_array.should == [ :A ]
     sub_cascading_composite_array.should == [ :A ]
 
@@ -849,11 +840,11 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.should == [ ]
     sub_cascading_composite_array.should == [ ]
 
-    cascading_composite_array += :B
+    cascading_composite_array.concat( :B )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B ]
 
-    sub_cascading_composite_array += :C
+    sub_cascading_composite_array.concat( :C )
     cascading_composite_array.should == [ :B ]
     sub_cascading_composite_array.should == [ :B, :C ]
 
@@ -915,7 +906,7 @@ describe ::Array::Unique::Compositing do
     
     class ::Array::Unique::Compositing::SubMockPreGet < ::Array::Unique::Compositing
       
-      def pre_get_hook( index )
+      def pre_get_hook( index, length )
         return false
       end
       
@@ -938,7 +929,7 @@ describe ::Array::Unique::Compositing do
 
     class ::Array::Unique::Compositing::SubMockPostGet < ::Array::Unique::Compositing
       
-      def post_get_hook( index, object )
+      def post_get_hook( index, object, length )
         return :some_other_value
       end
       
