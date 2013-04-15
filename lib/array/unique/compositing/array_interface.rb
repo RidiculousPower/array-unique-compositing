@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 module ::Array::Unique::Compositing::ArrayInterface
 
@@ -12,35 +13,23 @@ module ::Array::Unique::Compositing::ArrayInterface
     
     hooked_instance.class_eval do
       
-      unless method_defined?( :unique_set )
-        alias_method :unique_set, :[]=
-      end
+      alias_method :unique_set, :[]= unless method_defined?( :unique_set )
 
-      unless method_defined?( :unique_insert )
-        alias_method :unique_insert, :insert
-      end
+      alias_method :unique_insert, :insert unless method_defined?( :unique_insert )
 
-      unless method_defined?( :unique_delete_at )
-        alias_method :unique_delete_at, :delete_at
-      end
+      alias_method :unique_delete_at, :delete_at unless method_defined?( :unique_delete_at )
       
     end
     
   end
   
-  ##################################################################################################
-      private ######################################################################################
-  ##################################################################################################
-
   #####################################
   #  lazy_set_parent_element_in_self  #
   #####################################
 
-  def lazy_set_parent_element_in_self( local_index, *optional_object )
+  def lazy_set_parent_element_in_self( local_index, optional_object = nil, passed_optional_object = false )
   
-    object = super
-    
-    @unique_keys[ object ] = true
+    add_to_unique_objects( object = super )
     
     return object
     
@@ -50,12 +39,14 @@ module ::Array::Unique::Compositing::ArrayInterface
   #  update_for_parent_set  #
   ###########################
   
-  def update_for_parent_set( parent_instance, parent_index, object )
+  def update_for_parent_set( parent_array, parent_index, object )
     
     called_super = false
 
-    unless @unique_keys.has_key?( object )
-      @unique_keys[ object ] = true
+    if already_include?( object )
+      @cascade_controller.parent_set_without_child_set( parent_array, parent_index )
+    else
+      add_to_unique_objects( object )
       called_super = true
       super
     end
@@ -68,12 +59,14 @@ module ::Array::Unique::Compositing::ArrayInterface
   #  update_for_parent_insert  #
   ##############################
 
-  def update_for_parent_insert( parent_instance, requested_parent_index, parent_index, object )
+  def update_for_parent_insert( parent_array, requested_parent_index, parent_index, object )
     
     called_super = false
     
-    unless @unique_keys.has_key?( object )
-      @unique_keys[ object ] = true
+    if already_include?( object )
+      @cascade_controller.parent_insert_without_child_insert( parent_array, parent_index, 1 )
+    else
+      add_to_unique_objects( object )
       called_super = true
       super
     end
@@ -86,11 +79,9 @@ module ::Array::Unique::Compositing::ArrayInterface
   #  update_for_parent_delete_at  #
   #################################
 
-  def update_for_parent_delete_at( parent_instance, parent_index, object )
+  def update_for_parent_delete_at( parent_array, parent_index, object )
     
-    if did_delete = super
-      @unique_keys.delete( object )
-    end
+    delete_from_unique_objects( object ) if did_delete = super
     
     return did_delete
       

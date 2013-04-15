@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 
 require_relative '../../../lib/array/unique/compositing.rb'
 
@@ -54,6 +55,10 @@ describe ::Array::Unique::Compositing do
 
     cascading_composite_array[ 2 ] = :D
     cascading_composite_array.should == [ :A, :B, :D ]
+    sub_cascading_composite_array.should == [ :C, :B, :D ]
+
+    cascading_composite_array[ 3 ] = :C
+    cascading_composite_array.should == [ :A, :B, :D, :C ]
     sub_cascading_composite_array.should == [ :C, :B, :D ]
 
   end
@@ -862,7 +867,7 @@ describe ::Array::Unique::Compositing do
     
     class ::Array::Unique::Compositing::SubMockPreSet < ::Array::Unique::Compositing
       
-      def pre_set_hook( index, object, is_insert = false )
+      def pre_set_hook( index, object, is_insert = false, length = nil )
         return :some_other_value
       end
       
@@ -884,7 +889,7 @@ describe ::Array::Unique::Compositing do
 
     class ::Array::Unique::Compositing::SubMockPostSet < ::Array::Unique::Compositing
       
-      def post_set_hook( index, object, is_insert = false )
+      def post_set_hook( index, object, is_insert = false, length = nil )
         return :some_other_value
       end
       
@@ -892,7 +897,7 @@ describe ::Array::Unique::Compositing do
     
     cascading_composite_array = ::Array::Unique::Compositing::SubMockPostSet.new
 
-    cascading_composite_array.push( :some_value ).should == [ :some_other_value ]
+    cascading_composite_array.push( :some_value )
     
     cascading_composite_array.should == [ :some_value ]
     
@@ -998,7 +1003,7 @@ describe ::Array::Unique::Compositing do
     
     class ::Array::Unique::Compositing::SubMockChildPreSet < ::Array::Unique::Compositing
             
-      def child_pre_set_hook( index, object, is_insert = false, parent_instance = nil )
+      def child_pre_set_hook( index, object, is_insert = false, parent_array = nil )
         return :some_other_value
       end
       
@@ -1020,7 +1025,7 @@ describe ::Array::Unique::Compositing do
 
     class ::Array::Unique::Compositing::SubMockChildPostSet < ::Array::Unique::Compositing
       
-      def child_post_set_hook( index, object, is_insert = false, parent_instance = nil )
+      def child_post_set_hook( index, object, is_insert = false, parent_array = nil )
         push( :some_other_value )
       end
       
@@ -1043,7 +1048,7 @@ describe ::Array::Unique::Compositing do
 
     class ::Array::Unique::Compositing::SubMockChildPreDelete < ::Array::Unique::Compositing
       
-      def child_pre_delete_hook( index, parent_instance = nil )
+      def child_pre_delete_hook( index, parent_array = nil )
         false
       end
       
@@ -1067,7 +1072,7 @@ describe ::Array::Unique::Compositing do
 
     class ::Array::Unique::Compositing::SubMockChildPostDelete < ::Array::Unique::Compositing
       
-      def child_post_delete_hook( index, object, parent_instance = nil )
+      def child_post_delete_hook( index, object, parent_array = nil )
         delete( :some_other_value )
       end
       
