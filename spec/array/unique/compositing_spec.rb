@@ -617,27 +617,11 @@ describe ::Array::Unique::Compositing do
     cascading_composite_array.push( :A, :B, :C )
     cascading_composite_array.should == [ :A, :B, :C ]
     sub_cascading_composite_array.should == [ :A, :B, :C ]
-    cascading_composite_array.sort! do |a, b|
-      if a < b
-        1
-      elsif a > b
-        -1
-      elsif a == b
-        0
-      end
-    end
+    cascading_composite_array.sort!( & ::Array::ReverseSortBlock )
     cascading_composite_array.should == [ :C, :B, :A ]
     sub_cascading_composite_array.should == [ :C, :B, :A ]
 
-    sub_cascading_composite_array.sort! do |a, b|
-      if a < b
-        -1
-      elsif a > b
-        1
-      elsif a == b
-        0
-      end
-    end
+    sub_cascading_composite_array.sort!
     cascading_composite_array.should == [ :C, :B, :A ]
     sub_cascading_composite_array.should == [ :A, :B, :C ]
 
