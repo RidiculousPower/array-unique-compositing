@@ -22,3 +22,7 @@ Fix for lazy loading.
 ## 10/15/2012 ##
 
 Updated to support multiple parents.
+
+## 7/08/2013 ##
+
+Removed module-cluster dependency so that module-cluster can use hooked and compositing objects.
