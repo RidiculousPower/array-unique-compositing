@@ -25,6 +25,24 @@ module ::Array::Unique::Compositing::ArrayInterface
 
   alias_method :unique_delete_at, :delete_at
 
+  ###########################
+  #  register_parent_index  #
+  ###########################
+  
+  def register_parent_index( parent_array, parent_index, insert_at_index )
+    
+    registered = true
+    
+    if already_include?( parent_array[ parent_index ] )
+      registered = false
+    else
+      super
+    end
+    
+    return registered
+    
+  end
+
   #####################################
   #  lazy_set_parent_element_in_self  #
   #####################################
