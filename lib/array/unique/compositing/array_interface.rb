@@ -25,6 +25,34 @@ module ::Array::Unique::Compositing::ArrayInterface
 
   alias_method :unique_delete_at, :delete_at
 
+  #####################
+  #  register_parent  #
+  #####################
+  
+  ###
+  # Register a parent for element inheritance.
+  #
+  # @param [Array::Compositing] parent_array
+  #
+  #        Instance from which instance will inherit elements.
+  #
+  # @param [Integer] insert_at_index
+  #
+  #        Index where parent elements will be inserted.
+  #        Default is that new parent elements will be inserted after last existing parent element.
+  #
+  # @return [Array::Compositing] 
+  #
+  #         Self.
+  #
+  def register_parent( parent_array, insert_at_index = size )
+    
+    load_parent_state
+    
+    super
+    
+  end
+  
   ###########################
   #  register_parent_index  #
   ###########################
@@ -32,7 +60,7 @@ module ::Array::Unique::Compositing::ArrayInterface
   def register_parent_index( parent_array, parent_index, insert_at_index )
     
     registered = true
-    
+
     if already_include?( parent_array[ parent_index ] )
       registered = false
     else
@@ -42,7 +70,7 @@ module ::Array::Unique::Compositing::ArrayInterface
     return registered
     
   end
-
+  
   #####################################
   #  lazy_set_parent_element_in_self  #
   #####################################
